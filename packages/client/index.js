@@ -2,6 +2,12 @@
 
 const entries = Object.entries || require('object.entries') // eslint-disable-line node/no-unsupported-features
 
+try {
+  const p = require('react-native').Platform
+  global.Buffer = require('buffer').Buffer
+  global.process = require('process')
+} catch (e) {}
+
 const Client = require('./lib/Client')
 const {xml, jid} = require('@xmpp/client-core')
 
