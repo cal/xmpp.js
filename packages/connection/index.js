@@ -73,18 +73,17 @@ class Connection extends EventEmitter {
     }
     listeners.connect = () => {
       this._status('connect')
-      sock.once('close', listeners.close)
     }
     listeners.error = error => {
-      this._reset()
-      if (this.status === 'connecting') {
-        this._status('offline')
-      }
       this.emit('error', error)
+      if (this.status === 'connecting') {
+        this._status('disconnect', error)
+      }
     }
     sock.on('data', listeners.data)
     sock.on('error', listeners.error)
     sock.on('connect', listeners.connect)
+    sock.once('close', listeners.close)
   }
 
   _detachSocket() {
